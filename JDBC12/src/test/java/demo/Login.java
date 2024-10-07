@@ -15,6 +15,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -28,7 +29,7 @@ public class Login
 		System.out.println("data Fetch the DB");
 	}
 	
-	@BeforeTest
+	@BeforeMethod
 	public static  Object[][] data() throws SQLException
 	{
 		System.out.println(" Data base connection");
@@ -45,8 +46,8 @@ public class Login
 		String pwds=null;
 		while(result.next())
 		{
-		 user = result.getString("username");
-		 pwds = result.getString("pss");
+		 user = result.getString("username");//fetching the username
+		 pwds = result.getString("pss");//fetching the pass
 		list.add(user);
 		list.add(pwds);
 		}
@@ -54,8 +55,11 @@ public class Login
 				{
 					{user,pwds},
 					{user,pwds}
+			
 				};
 	}
+	
+	
 	@DataProvider(name="facebook_login")
 	public Object[][] data1() throws SQLException
 	{
@@ -66,6 +70,9 @@ public class Login
 	@Test(dataProvider ="facebook_login")
 	public void test(String un,String pass)
 	{
+		
+		System.out.println(un +" "+ pass);
+		
 		WebDriver driver = WebDriverManager.chromedriver().create();
 		driver.get("https://www.facebook.com");
 		driver.findElement(By.name("email")).sendKeys(un);
